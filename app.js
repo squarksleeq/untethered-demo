@@ -66,9 +66,8 @@
       cover.className = "track-cover";
       if (track.cover) {
         cover.style.backgroundImage = "url('" + track.cover + "')";
-      } else {
-        cover.textContent = initials(track.title);
       }
+      // 커버 이미지가 없으면 빈 상태로 둠 (머릿글 표시 안 함)
 
       // meta
       const meta = document.createElement("div");
@@ -137,7 +136,7 @@
       coverEl.textContent = "";
     } else {
       coverEl.style.backgroundImage = "";
-      coverEl.textContent = initials(track.title);
+      coverEl.textContent = "";
     }
 
     // reset progress
@@ -298,7 +297,7 @@
       // 초기 상태: 곡 정보만 표시하지 않고 비워둠
       titleEl.textContent = "곡을 선택하세요";
       artistEl.textContent = "";
-      coverEl.textContent = "♪";
+      coverEl.textContent = "";
     }
   }
 

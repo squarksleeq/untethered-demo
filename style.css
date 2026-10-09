@@ -159,11 +159,11 @@ text-overflow: ellipsis;
 }
 
 .track-play-icon {
-width: 36px;
-height: 36px;
-border-radius: 50%;
-background: var(--accent);
-color: #0d0d10;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #0d0d10;
 display: flex;
 align-items: center;
 justify-content: center;
@@ -298,8 +298,8 @@ transition: background 0.15s ease;
 .icon-btn:hover { background: var(--accent-soft); }
 
 .play-btn {
-background: var(--accent);
-color: #0d0d10;
+  background: #ffffff;
+  color: #0d0d10;
 border: none;
 width: 40px;
 height: 40px;
@@ -345,24 +345,24 @@ cursor: pointer;
 }
 
 .seek::-webkit-slider-thumb {
--webkit-appearance: none;
-appearance: none;
-width: 12px;
-height: 12px;
-border-radius: 50%;
-background: var(--accent);
-cursor: pointer;
-box-shadow: 0 0 8px rgba(139, 157, 255, 0.6);
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
 }
 
 .seek::-moz-range-thumb {
-width: 12px;
-height: 12px;
-border: none;
-border-radius: 50%;
-background: var(--accent);
-cursor: pointer;
-box-shadow: 0 0 8px rgba(139, 157, 255, 0.6);
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
 }
 
 .player-extra {
@@ -391,22 +391,22 @@ cursor: pointer;
 }
 
 .volume::-webkit-slider-thumb {
--webkit-appearance: none;
-appearance: none;
-width: 10px;
-height: 10px;
-border-radius: 50%;
-background: var(--accent);
-cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
 }
 
 .volume::-moz-range-thumb {
-width: 10px;
-height: 10px;
-border: none;
-border-radius: 50%;
-background: var(--accent);
-cursor: pointer;
+  width: 10px;
+  height: 10px;
+  border: none;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
 }
 
 /* ---------- Responsive ---------- */

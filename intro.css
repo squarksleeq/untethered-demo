@@ -22,7 +22,7 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* 페이드아웃 상태 (Enter 클릭 시) */
+/* 페이드아웃 상태 (Listen 클릭 시) */
 #intro.is-hidden {
   opacity: 0;
   pointer-events: none;
@@ -59,9 +59,24 @@ body.intro-locked {
   animation-delay: 1100ms;
 }
 
-/* --- Enter 버튼 --- */
+/* --- 설명 문구 (Enter/Listen 버튼 전에 페이드인) --- */
+.intro-desc {
+  font-size: clamp(0.9rem, 2.8vw, 1.1rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.7;
+  color: #cfc9c0;
+  margin: 34px 0 0;
+  max-width: 22em;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: introFadeUp 1400ms ease forwards;
+  animation-delay: 1700ms;
+}
+
+/* --- Listen 버튼 --- */
 .intro-enter {
-  margin-top: 56px;
+  margin-top: 52px;
   padding: 14px 40px;
   font-family: inherit;
   font-size: 0.95rem;
@@ -75,7 +90,7 @@ body.intro-locked {
   opacity: 0;
   transform: translateY(10px);
   animation: introFadeUp 1400ms ease forwards;
-  animation-delay: 1800ms;
+  animation-delay: 2400ms;
   transition: background 300ms ease, border-color 300ms ease, letter-spacing 300ms ease;
 }
 
@@ -103,6 +118,7 @@ body.intro-locked {
 @media (prefers-reduced-motion: reduce) {
   .intro-title,
   .intro-sub,
+  .intro-desc,
   .intro-enter {
     animation: none;
     opacity: 1;

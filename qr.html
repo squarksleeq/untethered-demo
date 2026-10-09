@@ -147,4 +147,135 @@
     .error {
       color: #dc2626;
       font-size: 13px;
-      margin-top
+      margin-top: 14px;
+      display: none;
+    }
+    .error.visible { display: block; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>QR 코드 생성기</h1>
+    <p class="sub">데모 청취 페이지로 연결되는 QR 코드를 만들어 드립니다.</p>
+
+    <label for="url-input">연결할 URL</label>
+    <input type="text" id="url-input" placeholder="https://squarksleeq.github.io/untethered-demo/" />
+    <p class="hint">비워두면 기본 데모 페이지 주소가 사용됩니다.</p>
+
+    <label>크기</label>
+    <div class="options">
+      <label><input type="radio" name="size" value="256" checked /> 보통 (256)</label>
+      <label><input type="radio" name="size" value="384" /> 크게 (384)</label>
+    </div>
+
+    <button class="btn-primary" id="gen-btn" type="button">QR 코드 생성</button>
+    <button class="btn-outline" id="download-btn" type="button" style="display:none;">PNG로 다운로드</button>
+
+    <div class="qr-box" id="qr-box">
+      <div id="qrcode"></div>
+      <div class="url-display" id="url-display"></div>
+    </div>
+
+    <p class="error" id="error-msg"></p>
+  </div>
+
+  <script>
+  /* ============================================================
+     내장 QR 코드 생성기 (외부 라이브러리/ CDN 의존성 없음)
+     - Kazuhiko Arase 의 qrcode-generator 알고리즘을 기반으로 한
+       최소 구현. 모델 2, 버전 자동 선택, 오류정정 레벨 M.
+     - 텍스트를 받아 캔버스에 QR을 그립니다.
+     ============================================================ */
+  (function () {
+    "use strict";
+
+    /* ---------- GF(256) 산술 (Reed-Solomon 용) ---------- */
+    var EXP = new Uint8Array(256);
+    var LOG = new Uint8Array(256);
+    (function initGF() {
+      var x = 1;
+      for (var i = 0; i < 255; i++) {
+        EXP[i] = x;
+        LOG[x] = i;
+        x <<= 1;
+        if (x & 0x100) x ^= 0x11d; // QR 표준 다항식
+      }
+      EXP[255] = EXP[0];
+    })();
+
+    function gfMul(a, b) {
+      if (a === 0 || b === 0) return 0;
+      return EXP[(LOG[a] + LOG[b]) % 255];
+    }
+
+    /* ---------- Reed-Solomon 오류정정 코드 생성 ---------- */
+    function rsGenPoly(degree) {
+      var poly = [1];
+      for (var i = 0; i < degree; i++) {
+        var next = new Array(poly.length + 1).fill(0);
+        for (var j = 0; j < poly.length; j++) {
+          next[j] ^= gfMul(poly[j], 1);
+          next[j + 1] ^= gfMul(poly[j], EXP[i]);
+        }
+        // 위 루프는 (x + a^i) 곱셈을 근사; 정확히는 아래 방식 사용
+        poly = next;
+      }
+      return poly;
+    }
+
+    function rsEncode(data, ecLen) {
+      // 생성 다항식 계산
+      var gen = [1];
+      for (var i = 0; i < ecLen; i++) {
+        var newGen = new Array(gen.length + 1).fill(0);
+        for (var j = 0; j < gen.length; j++) {
+          newGen[j] ^= gen[j];
+          newGen[j + 1] ^= gfMul(gen[j], EXP[i]);
+        }
+        gen = newGen;
+      }
+      // data 를 gen 으로 나눈 나머지 = EC 코드
+      var res = data.slice().concat(new Array(ecLen).fill(0));
+      for (var k = 0; k < data.length; k++) {
+        var coef = res[k];
+        if (coef !== 0) {
+          for (var m = 0; m < gen.length; m++) {
+            res[k + m] ^= gfMul(gen[m], coef);
+          }
+        }
+      }
+      return res.slice(data.length);
+    }
+
+    /* ---------- QR 버전별 데이터 용량 (오류정정 M) ---------- */
+    // [데이터 코드워드 수, EC 코드워드 수(블록당), 블록 수] — 버전 1~10, 레벨 M
+    var RS_BLOCK_TABLE_M = {
+      1:  [[16, 10, 1]],
+      2:  [[28, 16, 1]],
+      3:  [[44, 26, 1]],
+      4:  [[64, 18, 2]],
+      5:  [[86, 24, 2]],
+      6:  [[108, 16, 4]],
+      7:  [[124, 18, 4]],
+      8:  [[154, 22, 2], [154, 22, 2]],
+      9:  [[182, 22, 2], [182, 22, 2]],
+      10: [[216, 26, 2], [216, 26, 2]]
+    };
+    // 위 표는 간략화한 근사치로, 버전 자동 선택에 사용합니다.
+    // 정확한 QR 생성은 아래의 완전 구현으로 대체됩니다.
+
+    /* ============================================================
+       아래는 검증된 경량 QR 인코더 (Nayuki 스타일, 퍼블릭 도메인 로직 참고)
+       ============================================================ */
+    var QrCode = (function () {
+      // 오류정정 레벨 M
+      var ECC_M = 0;
+
+      // 버전별 오류정정 블록 정보 (레벨 M): [ecCodewordsPerBlock, numBlocksGroup1, dataCodewordsGroup1, numBlocksGroup2, dataCodewordsGroup2]
+      var ECC_CODEWORDS_PER_BLOCK_M = [
+        -1, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26, 30, 22, 22, 24, 24, 28, 28, 26, 26, 26,
+        26, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28
+      ];
+      var NUM_ERROR_CORRECTION_BLOCKS_M = [
+        -1, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5, 5, 8, 9, 9, 10, 10, 11, 13, 14, 16,
+        17, 17, 18, 20, 21, 23, 25, 26, 28, 29, 31, 33, 35, 37, 38, 40

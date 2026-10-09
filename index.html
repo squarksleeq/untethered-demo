@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo Listening</title>
+  <meta name="description" content="QR로 접속해서 데모를 바로 들어보세요" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <h1 class="hero-title">Demo Listening</h1>
+      <p class="hero-sub">아래 목록에서 원하는 데모를 눌러 바로 들어보세요.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <ul id="track-list" class="track-list" aria-label="데모 목록"></ul>
+    <p id="empty-message" class="empty-message" hidden>
+      아직 등록된 데모가 없습니다.<br />
+      <code>tracks.js</code> 파일에 곡을 추가해주세요.
+    </p>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Demo Listening</p>
+  </footer>
+
+  <div id="player" class="player" hidden>
+    <div class="player-inner">
+      <div class="player-info">
+        <div class="player-cover" id="player-cover"></div>
+        <div class="player-meta">
+          <div class="player-title" id="player-title">—</div>
+          <div class="player-artist" id="player-artist">—</div>
+        </div>
+      </div>
+
+      <div class="player-controls">
+        <button id="prev-btn" class="icon-btn" aria-label="이전 곡">⏮</button>
+        <button id="play-btn" class="play-btn" aria-label="재생/일시정지">▶</button>
+        <button id="next-btn" class="icon-btn" aria-label="다음 곡">⏭</button>
+      </div>
+
+      <div class="player-progress">
+        <span id="current-time" class="time">0:00</span>
+        <input type="range" id="seek" class="seek" min="0" max="100" value="0" step="0.1" aria-label="재생 위치" />
+        <span id="duration" class="time">0:00</span>
+      </div>
+
+      <div class="player-extra">
+        <label class="volume-label" for="volume">🔊</label>
+        <input type="range" id="volume" class="volume" min="0" max="1" step="0.01" value="1" aria-label="볼륨" />
+      </div>
+    </div>
+    <audio id="audio" preload="metadata"></audio>
+  </div>
+
+  <script src="tracks.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

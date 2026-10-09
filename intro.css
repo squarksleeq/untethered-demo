@@ -1,0 +1,114 @@
+/* ============================================================
+   intro.css — 자유낙하 Untethered Demo 인트로 화면
+   기존 style.css 뒤에 로드되며, 인트로 전용 스타일만 담당합니다.
+   ============================================================ */
+
+/* --- 인트로 오버레이 --- */
+#intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #0b0b0d;
+  color: #f5f3ef;
+  font-family: "Gowun Batang", serif;
+  text-align: center;
+  padding: 24px;
+  opacity: 1;
+  transition: opacity 900ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 페이드아웃 상태 (Enter 클릭 시) */
+#intro.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* body 스크롤 잠금 (인트로 표시 중) */
+body.intro-locked {
+  overflow: hidden;
+}
+
+/* --- 텍스트 요소 --- */
+.intro-title {
+  font-size: clamp(1.8rem, 6vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin: 0;
+  line-height: 1.25;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: introFadeUp 1400ms ease forwards;
+  animation-delay: 400ms;
+}
+
+.intro-sub {
+  font-size: clamp(0.85rem, 2.6vw, 1.05rem);
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8f8a82;
+  margin: 18px 0 0;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: introFadeUp 1400ms ease forwards;
+  animation-delay: 1100ms;
+}
+
+/* --- Enter 버튼 --- */
+.intro-enter {
+  margin-top: 56px;
+  padding: 14px 40px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #f5f3ef;
+  background: transparent;
+  border: 1px solid rgba(245, 243, 239, 0.35);
+  border-radius: 999px;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: introFadeUp 1400ms ease forwards;
+  animation-delay: 1800ms;
+  transition: background 300ms ease, border-color 300ms ease, letter-spacing 300ms ease;
+}
+
+.intro-enter:hover,
+.intro-enter:focus-visible {
+  background: rgba(245, 243, 239, 0.08);
+  border-color: rgba(245, 243, 239, 0.7);
+  letter-spacing: 0.24em;
+  outline: none;
+}
+
+.intro-enter:active {
+  transform: scale(0.97);
+}
+
+/* --- 애니메이션 --- */
+@keyframes introFadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- 접근성: 모션 최소화 선호 시 애니메이션 제거 --- */
+@media (prefers-reduced-motion: reduce) {
+  .intro-title,
+  .intro-sub,
+  .intro-enter {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  #intro {
+    transition: none;
+  }
+}

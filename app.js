@@ -80,7 +80,7 @@
       // play icon
       const icon = document.createElement("div");
       icon.className = "track-play-icon";
-      icon.textContent = "▶";
+      icon.textContent = "▷";
 
       li.appendChild(meta);
       li.appendChild(icon);
@@ -187,7 +187,7 @@
   }
 
   function setPlayIcon(isPlaying) {
-    playBtn.textContent = isPlaying ? "❚❚" : "▶";
+    playBtn.textContent = isPlaying ? "❚❚" : "▷";
   }
 
   function updatePlayingHighlight() {
@@ -196,11 +196,11 @@
       if (i === currentIndex) {
         item.classList.add("playing");
         const icon = item.querySelector(".track-play-icon");
-        if (icon) icon.textContent = audio.paused ? "▶" : "❚❚";
+        if (icon) icon.textContent = audio.paused ? "▷" : "❚❚";
       } else {
         item.classList.remove("playing");
         const icon = item.querySelector(".track-play-icon");
-        if (icon) icon.textContent = "▶";
+        if (icon) icon.textContent = "▷";
       }
     });
   }

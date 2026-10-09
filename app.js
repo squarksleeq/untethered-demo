@@ -61,13 +61,6 @@
       li.setAttribute("tabindex", "0");
       li.setAttribute("aria-label", (track.title || "제목 없음") + " 재생");
 
-      // cover
-      const cover = document.createElement("div");
-      cover.className = "track-cover";
-      if (track.cover) {
-        cover.style.backgroundImage = "url('" + track.cover + "')";
-      }
-      // 커버 이미지가 없으면 빈 상태로 둠 (머릿글 표시 안 함)
 
       // meta
       const meta = document.createElement("div");
@@ -89,7 +82,6 @@
       icon.className = "track-play-icon";
       icon.textContent = "▶";
 
-      li.appendChild(cover);
       li.appendChild(meta);
       li.appendChild(icon);
 

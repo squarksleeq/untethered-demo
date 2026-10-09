@@ -19,7 +19,7 @@ html, body {
   padding: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: "Noto Serif KR", "Nanum Myeongjo", "Apple SD Gothic Neo",
+  font-family: "Gowun Batang", "Nanum Myeongjo", "Apple SD Gothic Neo",
     "Malgun Gothic", serif;
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;

@@ -124,6 +124,30 @@ body.intro-locked {
     opacity: 1;
     transform: none;
   }
+
+   /* 첫 화면 배경 로고 */
+.intro {
+  position: relative;
+  isolation: isolate;
+}
+
+.intro::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image: url("./images/untethered-logo.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: min(115vw, 1400px);
+
+  /* 검정 배경에 어울리는 은은한 흰색 로고 */
+  filter: brightness(0) invert(1);
+  opacity: 0.045;
+
+  pointer-events: none;
+  z-index: -1;
+}
   #intro {
     transition: none;
   }
